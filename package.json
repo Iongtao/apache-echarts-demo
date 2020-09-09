@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "echarts": "^4.9.0",
+    "element-ui": "^2.13.2",
+    "iview": "^1.0.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -32,7 +35,17 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": [
+        "2",
+        {
+          "vars": "local",
+          "args": "none",
+          "ignoreRestSiblings": false
+        }
+      ],
+      "no-debugger": "off"
+    }
   },
   "browserslist": [
     "> 1%",
