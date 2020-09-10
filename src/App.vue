@@ -48,7 +48,14 @@ export default {
             right: 100,
           },
           tooltip: {
-            show: true,
+            trigger: "item",
+            formatter: (p) => {
+              if (p.seriesName === "bg") {
+                return "";
+              } else {
+                return `数量：${p.name}<br/>占比：${p.value * 100}%`;
+              }
+            },
           },
           xAxis: {
             show: false,
@@ -67,6 +74,7 @@ export default {
           ],
           series: [
             {
+              name: "bg",
               type: "bar",
               z: 1,
               data: [1, 1, 1, 1, 1, 1],
@@ -102,13 +110,13 @@ export default {
           legend: {
             orient: "vertical",
             right: 0,
-            bottom: '20%',
+            bottom: "20%",
             itemWidth: 6,
             itemHeight: 6,
-            icon: 'circle',
+            icon: "circle",
             textStyle: {
               fontSize: 12,
-              color: '#397cbf'
+              color: "#397cbf",
             },
             data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"],
           },
@@ -123,7 +131,7 @@ export default {
                 show: true,
                 color: "rgba(0,0,0,.5)",
                 fontSize: 10,
-                formatter: '{d}%'
+                formatter: "{d}%",
               },
               labelLine: {
                 normal: {
