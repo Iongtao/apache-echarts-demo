@@ -1,13 +1,25 @@
 <template>
   <div>
     <div id="main">123,456,789</div>
-    <!-- <my-charts :id="one.id" :option="one.option"></my-charts> -->
-    <!-- <my-charts class="two" :id="two.id" :option="two.option"></my-charts> -->
-    <!-- <my-charts width="320" height="140" :id="three.id" :option="three.option" /> -->
+    <my-charts :id="one.id" :option="one.option"></my-charts>
+    <my-charts
+      class="two"
+      width="360"
+      height="160"
+      :id="two.id"
+      :option="two.option"
+    ></my-charts>
+    <my-charts
+      width="320"
+      height="160"
+      :id="three.id"
+      :option="three.option"
+      @getInstence="getInstenceThree"
+    />
     <my-charts
       ref="four"
-      width="620"
-      height="300"
+      width="320"
+      height="140"
       :id="four.id"
       :option="four.option"
       @getInstence="getInstenceFour"
@@ -81,11 +93,23 @@ export default {
         option: {
           tooltip: {
             trigger: "item",
+            fontSize: 10,
             formatter: "{a} <br/>{b}: {c} ({d}%)",
+          },
+          grid: {
+            right: "100%",
           },
           legend: {
             orient: "vertical",
-            left: 10,
+            right: 0,
+            bottom: '20%',
+            itemWidth: 6,
+            itemHeight: 6,
+            icon: 'circle',
+            textStyle: {
+              fontSize: 12,
+              color: '#397cbf'
+            },
             data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"],
           },
           series: [
@@ -93,21 +117,27 @@ export default {
               name: "访问来源",
               type: "pie",
               radius: ["50%", "70%"],
+              center: ["40%", "50%"],
               avoidLabelOverlap: false,
               label: {
                 show: true,
+                color: "rgba(0,0,0,.5)",
+                fontSize: 10,
+                formatter: '{d}%'
               },
               labelLine: {
                 normal: {
+                  length: 14,
+                  length2: 8,
                   lineStyle: {
-                    color: "rgba(200,0,0,1)",
+                    color: "rgba(0,0,0, .5)",
+                    type: "dotted",
                   },
                 },
               },
               emphasis: {
                 label: {
                   show: true,
-                  fontSize: "30",
                   fontWeight: "bold",
                 },
               },
@@ -122,7 +152,7 @@ export default {
                 {
                   value: 135,
                   name: "视频广告",
-                  itemStyle: { color: "skyblu" },
+                  itemStyle: { color: "skyblue" },
                 },
                 { value: 1548, name: "搜索引擎", itemStyle: { color: "pink" } },
               ],
@@ -261,6 +291,16 @@ export default {
               },
             },
           ],
+          dataZoom: [
+            {
+              show: false,
+              type: "slider",
+              minValueSpan: 5,
+              maxValueSpan: 5,
+              zoomLock: true,
+              startValue: 0,
+            },
+          ],
         },
       },
       four: {
@@ -277,8 +317,7 @@ export default {
           },
           grid: {
             left: "5%",
-            right: "15%",
-            bottom: "20%",
+            bottom: "10%",
           },
           tooltip: {
             trigger: "axis",
@@ -331,11 +370,51 @@ export default {
               name: "今日",
               type: "bar",
               data: [],
+              itemStyle: {
+                color: {
+                  type: "linear",
+                  x: 1,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "rgba(46, 101, 169, .8)", // 0% 处的颜色
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(12, 105, 221, 1)", // 100% 处的颜色
+                    },
+                  ],
+                  global: false,
+                },
+              },
             },
             {
               name: "昨日",
               type: "bar",
               data: [],
+              itemStyle: {
+                color: {
+                  type: "linear",
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "rgba(215, 146, 50, .8)", // 0% 处的颜色
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(230, 138, 11, 1)", // 100% 处的颜色
+                    },
+                  ],
+                  global: false, // 缺省为 false
+                },
+              },
             },
           ],
           dataZoom: [
@@ -354,15 +433,15 @@ export default {
   },
   created() {
     // one
-    // const arr = [20, 40, 30, 50, 20, 80];
-    // this.one.option.series[1].data = this.formatterData(
-    //   arr.sort((a, b) => a - b)
-    // );
-    // this.one.show = true;
+    const arr = [20, 40, 30, 50, 20, 80];
+    this.one.option.series[1].data = this.formatterData(
+      arr.sort((a, b) => a - b)
+    );
+    this.one.show = true;
     //  three
-    // this.three.option.xAxis.data = this.generateDate().map((v) => v.time);
-    // this.three.option.series[0].data = this.generateDate().map((v) => v.data);
-    // this.three.option.series[1].data = this.generateDate().map((v) => v.data);
+    this.three.option.xAxis.data = this.generateDate().map((v) => v.time);
+    this.three.option.series[0].data = this.generateDate().map((v) => v.data);
+    this.three.option.series[1].data = this.generateDate().map((v) => v.data);
     this.four.option.xAxis.data = this.generateDate().map((v) => v.time);
     this.four.option.series[0].data = this.generateDate().map((v) => v.data);
     this.four.option.series[1].data = this.generateDate().map((v) => v.data);
@@ -396,7 +475,7 @@ export default {
       let interval = setInterval(() => {
         let index = this.four.option.dataZoom[0].startValue;
         const len = this.four.option.dataZoom[0].maxValueSpan + 1;
-        if (len + index >= this.four.option.xAxis.data.length - 1) {
+        if (len + index >= this.four.option.xAxis.data.length) {
           this.four.option.dataZoom[0].startValue = 0;
         } else {
           this.four.option.dataZoom[0].startValue += 1;
@@ -404,9 +483,25 @@ export default {
         chart.setOption(this.four.option);
       }, 2000);
 
-      this.$once('hook:beforeDestory', () => {
+      this.$once("hook:beforeDestory", () => {
         clearInterval(interval);
-      })
+      });
+    },
+    getInstenceThree(chart) {
+      let interval = setInterval(() => {
+        let index = this.three.option.dataZoom[0].startValue;
+        const len = this.three.option.dataZoom[0].maxValueSpan + 1;
+        if (len + index >= this.three.option.xAxis.data.length) {
+          this.three.option.dataZoom[0].startValue = 0;
+        } else {
+          this.three.option.dataZoom[0].startValue += 1;
+        }
+        chart.setOption(this.three.option);
+      }, 2000);
+
+      this.$once("hook:beforeDestory", () => {
+        clearInterval(interval);
+      });
     },
   },
 };
